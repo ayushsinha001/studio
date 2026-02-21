@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -10,7 +9,9 @@ import {
   Loader2, 
   AlertTriangle, 
   CheckCircle2, 
-  Lightbulb
+  Lightbulb,
+  BookOpen,
+  ArrowRight
 } from "lucide-react"
 
 import { predictCaseOutcome, type PredictCaseOutcomeOutput } from "@/ai/flows/predict-case-outcome"
@@ -264,7 +265,7 @@ export function OutcomePredictor() {
               <Card className="glass-card border-none overflow-hidden ring-1 ring-primary/20">
                 <CardHeader className="bg-primary/5 pb-6">
                   <div className="flex justify-between items-center mb-4">
-                    <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">India Model v2.4</Badge>
+                    <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">India Model v2.5</Badge>
                     <div className="flex items-center gap-1 text-primary">
                       <CheckCircle2 className="w-4 h-4" />
                       <span className="text-[10px] font-bold uppercase tracking-widest">Analysis Ready</span>
@@ -297,20 +298,27 @@ export function OutcomePredictor() {
                     </ul>
                   </div>
 
-                  <div className="space-y-3">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <AlertTriangle className="w-3 h-3 text-rose-500" />
-                      Critical Risk Vectors
-                    </h4>
-                    <ul className="space-y-2">
-                      {result.keyRisks.map((r, i) => (
-                        <li key={i} className="text-sm flex items-start gap-3 text-foreground/80 leading-relaxed">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
-                          {r}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {result.references && result.references.length > 0 && (
+                    <div className="pt-4 border-t border-white/5 space-y-3">
+                      <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                        <BookOpen className="w-3 h-3" />
+                        Legal Precedents & References
+                      </h4>
+                      <div className="space-y-3">
+                        {result.references.map((ref, i) => (
+                          <div key={i} className="p-4 rounded-xl bg-primary/5 border border-primary/10 group hover:bg-primary/10 transition-colors">
+                            <div className="flex justify-between items-start mb-2">
+                              <span className="text-sm font-bold text-primary">{ref.caseName}</span>
+                              <Badge variant="outline" className="text-[10px] font-mono border-primary/20">{ref.citation}</Badge>
+                            </div>
+                            <p className="text-xs text-muted-foreground leading-relaxed italic">
+                              {ref.relevance}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
@@ -334,4 +342,3 @@ export function OutcomePredictor() {
     </div>
   )
 }
-

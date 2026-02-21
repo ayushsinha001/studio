@@ -29,7 +29,12 @@ const PredictCaseOutcomeOutputSchema = z.object({
   confidenceScore: z.number().min(0).max(100).describe('A numerical score (0-100) representing the confidence in the predicted outcome.'),
   keyStrengths: z.array(z.string()).describe('A list of key factors that strengthen the case.'),
   keyRisks: z.array(z.string()).describe('A list of key factors that pose risks or weaknesses.'),
-  strategySuggestions: z.array(z.string()).describe('Actionable suggestions for strategic approaches based on Indian law and procedure.')
+  strategySuggestions: z.array(z.string()).describe('Actionable suggestions for strategic approaches based on Indian law and procedure.'),
+  references: z.array(z.object({
+    caseName: z.string().describe('Name of the historical reference case.'),
+    citation: z.string().describe('Legal citation for the reference case.'),
+    relevance: z.string().describe('Brief explanation of why this case is relevant to the current prediction.')
+  })).describe('Historical cases or legal precedents used to derive this prediction.')
 });
 export type PredictCaseOutcomeOutput = z.infer<typeof PredictCaseOutcomeOutputSchema>;
 
@@ -43,7 +48,7 @@ const predictCaseOutcomePrompt = ai.definePrompt({
   output: {schema: PredictCaseOutcomeOutputSchema},
   prompt: `You are CourtIQ AI, a senior legal associate and expert in Indian Jurisprudence. Maintain a professional, neutral, and assertive tone. Prioritize legal accuracy and structural formality within the context of Indian Law (IPC/BNS, CrPC/BNSS, CPC, Evidence Act/BSA).
 
-Your task is to analyze the provided Indian legal case details and evidence strengths to predict the most likely case outcome. You must also provide a confidence score, identify key strengths and risks, and suggest strategic approaches.
+Your task is to analyze the provided Indian legal case details and evidence strengths to predict the most likely case outcome. You must also provide a confidence score, identify key strengths and risks, suggest strategic approaches, and most importantly, identify historical Indian legal precedents (Supreme Court or High Court cases) that support your prediction.
 
 Analyze the following case information:
 
@@ -59,7 +64,7 @@ Evidence Strengths (0-100 scale):
 - Legal Precedents: {{{evidenceStrengthSliders.precedents}}}
 - Opponent's Case Strength: {{{evidenceStrengthSliders.opponent}}}
 
-Based on this analysis, provide the predicted outcome, confidence score, key strengths, key risks, and strategy suggestions in the specified JSON format.`
+Based on this analysis, provide the predicted outcome, confidence score, key strengths, key risks, strategy suggestions, and the list of reference cases in the specified JSON format.`
 });
 
 const predictCaseOutcomeFlow = ai.defineFlow(
