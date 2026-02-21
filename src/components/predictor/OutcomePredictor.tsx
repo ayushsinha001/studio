@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,8 +10,7 @@ import {
   Loader2, 
   AlertTriangle, 
   CheckCircle2, 
-  Lightbulb,
-  Scale
+  Lightbulb
 } from "lucide-react"
 
 import { predictCaseOutcome, type PredictCaseOutcomeOutput } from "@/ai/flows/predict-case-outcome"
@@ -21,6 +21,23 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+
+const caseTypes = [
+  "Civil Writ Petition",
+  "Criminal Appeal",
+  "PIL",
+  "Matrimonial",
+  "Property Dispute",
+  "Service Matter",
+  "Insolvency/NCLT",
+  "Consumer Case",
+  "Cheque Bounce",
+  "Motor Accident",
+  "Taxation",
+  "Arbitration"
+]
 
 const formSchema = z.object({
   caseType: z.string().min(2, "Required"),
@@ -95,42 +112,64 @@ export function OutcomePredictor() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                
+                <FormField
+                  control={form.control}
+                  name="caseType"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel className="text-sm font-semibold text-foreground/80">Select Case Category</FormLabel>
+                      <FormControl>
+                        <ScrollArea className="w-full whitespace-nowrap rounded-xl border border-white/5 bg-white/5 p-2 shadow-inner">
+                          <div className="flex w-max space-x-2 p-1">
+                            {caseTypes.map((type) => (
+                              <button
+                                key={type}
+                                type="button"
+                                onClick={() => field.onChange(type)}
+                                className={cn(
+                                  "inline-flex h-10 items-center justify-center rounded-lg px-6 text-xs font-bold uppercase tracking-wider transition-all duration-300",
+                                  field.value === type
+                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30 scale-105 border border-primary/20"
+                                    : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground border border-transparent"
+                                )}
+                              >
+                                {type}
+                              </button>
+                            ))}
+                          </div>
+                          <ScrollBar orientation="horizontal" className="h-2" />
+                        </ScrollArea>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="caseType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Case Type</FormLabel>
-                        <FormControl><Input placeholder="e.g. Property Dispute" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="courtLevel"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Court Level</FormLabel>
-                        <FormControl><Input placeholder="e.g. High Court" {...field} /></FormControl>
+                        <FormControl><Input placeholder="e.g. High Court" {...field} className="bg-white/5 border-white/10" /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="jurisdiction"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Jurisdiction (State/UT)</FormLabel>
+                        <FormControl><Input placeholder="e.g. Maharashtra" {...field} className="bg-white/5 border-white/10" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
-
-                <FormField
-                  control={form.control}
-                  name="jurisdiction"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Jurisdiction (State/UT)</FormLabel>
-                      <FormControl><Input placeholder="e.g. Maharashtra" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <FormField
                   control={form.control}
@@ -141,7 +180,7 @@ export function OutcomePredictor() {
                       <FormControl>
                         <Textarea 
                           placeholder="Provide summary of facts, relevant sections (e.g. Sec 138 NI Act), and dates..."
-                          className="min-h-[120px] resize-none"
+                          className="min-h-[120px] resize-none bg-white/5 border-white/10 focus:border-primary/50 transition-colors"
                           {...field} 
                         />
                       </FormControl>
@@ -164,9 +203,9 @@ export function OutcomePredictor() {
                       name={slider.name as any}
                       render={({ field }) => (
                         <FormItem className="space-y-3">
-                          <div className="flex justify-between">
-                            <FormLabel className="text-xs">{slider.label}</FormLabel>
-                            <span className="text-xs font-mono text-primary">{field.value}%</span>
+                          <div className="flex justify-between items-center">
+                            <FormLabel className="text-xs text-muted-foreground">{slider.label}</FormLabel>
+                            <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">{field.value}%</span>
                           </div>
                           <FormControl>
                             <Slider
@@ -175,6 +214,7 @@ export function OutcomePredictor() {
                               step={1}
                               value={[field.value]}
                               onValueChange={(vals) => field.onChange(vals[0])}
+                              className="py-2"
                             />
                           </FormControl>
                         </FormItem>
@@ -183,14 +223,14 @@ export function OutcomePredictor() {
                   ))}
                 </div>
 
-                <Button type="submit" className="w-full h-12 rounded-xl text-base blue-gradient" disabled={loading}>
+                <Button type="submit" className="w-full h-12 rounded-xl text-base font-bold uppercase tracking-widest blue-gradient shadow-xl shadow-primary/20" disabled={loading}>
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Analyzing Data...
+                      Computing Prediction...
                     </>
                   ) : (
-                    <>Analyze Outcome</>
+                    <>Run Prediction Engine</>
                   )}
                 </Button>
               </form>
@@ -202,10 +242,10 @@ export function OutcomePredictor() {
           {!result && !loading && (
             <Card className="h-full border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-12 text-center">
               <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                <BrainCircuit className="w-8 h-8 text-muted-foreground" />
+                <BrainCircuit className="w-8 h-8 text-muted-foreground/40" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Awaiting Analysis</h3>
-              <p className="text-sm text-muted-foreground">Complete the form and evidentiary assessment to generate an Indian legal prediction.</p>
+              <h3 className="text-lg font-semibold mb-2">Awaiting Intelligence Input</h3>
+              <p className="text-sm text-muted-foreground">Select a case category and adjust the evidentiary strength parameters to generate a predictive judicial model.</p>
             </Card>
           )}
 
@@ -221,20 +261,20 @@ export function OutcomePredictor() {
 
           {result && !loading && (
             <div className="space-y-6 animate-in fade-in zoom-in duration-500">
-              <Card className="glass-card border-none overflow-hidden">
+              <Card className="glass-card border-none overflow-hidden ring-1 ring-primary/20">
                 <CardHeader className="bg-primary/5 pb-6">
                   <div className="flex justify-between items-center mb-4">
-                    <Badge variant="outline" className="text-primary border-primary/20">India Model v2.4</Badge>
+                    <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">India Model v2.4</Badge>
                     <div className="flex items-center gap-1 text-primary">
                       <CheckCircle2 className="w-4 h-4" />
-                      <span className="text-xs font-bold uppercase tracking-widest">Analysis Ready</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Analysis Ready</span>
                     </div>
                   </div>
-                  <CardTitle className="text-3xl font-bold tracking-tight mb-2">{result.predictedOutcome}</CardTitle>
+                  <CardTitle className="text-3xl font-bold tracking-tight mb-2 text-primary">{result.predictedOutcome}</CardTitle>
                   <div className="flex items-center gap-3">
                     <div className="flex-1 bg-white/10 rounded-full h-2">
                       <div 
-                        className="bg-primary h-full rounded-full" 
+                        className="bg-primary h-full rounded-full transition-all duration-1000" 
                         style={{ width: `${result.confidenceScore}%` }}
                       />
                     </div>
@@ -243,14 +283,14 @@ export function OutcomePredictor() {
                 </CardHeader>
                 <CardContent className="pt-6 space-y-6">
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                       <AlertTriangle className="w-3 h-3 text-emerald-500" />
-                      Key Strengths
+                      Strategic Strengths
                     </h4>
                     <ul className="space-y-2">
                       {result.keyStrengths.map((s, i) => (
-                        <li key={i} className="text-sm flex items-start gap-2 text-foreground/80">
-                          <span className="w-1 h-1 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                        <li key={i} className="text-sm flex items-start gap-3 text-foreground/80 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                           {s}
                         </li>
                       ))}
@@ -258,14 +298,14 @@ export function OutcomePredictor() {
                   </div>
 
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                       <AlertTriangle className="w-3 h-3 text-rose-500" />
-                      Critical Risks
+                      Critical Risk Vectors
                     </h4>
                     <ul className="space-y-2">
                       {result.keyRisks.map((r, i) => (
-                        <li key={i} className="text-sm flex items-start gap-2 text-foreground/80">
-                          <span className="w-1 h-1 rounded-full bg-rose-500 mt-2 shrink-0" />
+                        <li key={i} className="text-sm flex items-start gap-3 text-foreground/80 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
                           {r}
                         </li>
                       ))}
@@ -273,13 +313,13 @@ export function OutcomePredictor() {
                   </div>
 
                   <div className="pt-4 border-t border-white/5 space-y-3">
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
                       <Lightbulb className="w-3 h-3" />
-                      Strategic Suggestions
+                      Judicial Strategy Recommendations
                     </h4>
                     <div className="space-y-3">
                       {result.strategySuggestions.map((s, i) => (
-                        <div key={i} className="p-3 rounded-lg bg-white/5 border border-white/5 text-sm text-foreground/90 leading-relaxed italic">
+                        <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5 text-sm text-foreground/90 leading-relaxed italic border-l-primary/30 border-l-2">
                           "{s}"
                         </div>
                       ))}
@@ -294,3 +334,4 @@ export function OutcomePredictor() {
     </div>
   )
 }
+
