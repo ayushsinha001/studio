@@ -14,6 +14,9 @@ import { TriageCenter } from "@/components/assessment/TriageCenter"
 import { IntelligenceHub } from "@/components/intelligence/IntelligenceHub"
 import { EvidenceHub } from "@/components/evidence/EvidenceHub"
 import { CitizenPortal } from "@/components/citizen/CitizenPortal"
+import { SettlementOptimizer } from "@/components/settlement/SettlementOptimizer"
+import { AdjournmentAnalyzer } from "@/components/adjournments/AdjournmentAnalyzer"
+import { CalendarOptimizer } from "@/components/calendar/CalendarOptimizer"
 import { Bell, Search } from "lucide-react"
 
 export default function CourtIQApp() {
@@ -25,6 +28,9 @@ export default function CourtIQApp() {
       case "triage": return <TriageCenter />
       case "intelligence": return <IntelligenceHub />
       case "evidence": return <EvidenceHub />
+      case "calendar": return <CalendarOptimizer />
+      case "adjournments": return <AdjournmentAnalyzer />
+      case "settlement": return <SettlementOptimizer />
       case "simplifier": return <CitizenPortal />
       case "predictor": return <OutcomePredictor />
       case "research": return <ResearchEngine />

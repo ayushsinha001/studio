@@ -16,7 +16,10 @@ import {
   Globe,
   FileSearch,
   User,
-  Gavel
+  Gavel,
+  Handshake,
+  Clock,
+  CalendarDays
 } from "lucide-react"
 
 import {
@@ -36,6 +39,9 @@ const mainNav = [
   { id: 'triage', label: 'Case Triage & JAI', icon: Zap },
   { id: 'intelligence', label: 'Intelligence Grid', icon: Globe },
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
+  { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },
+  { id: 'adjournments', label: 'Adjournment Analyzer', icon: Clock },
+  { id: 'settlement', label: 'Settlement Optimizer', icon: Handshake },
   { id: 'simplifier', label: 'Citizen Portal', icon: User },
   { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'research', label: 'Research Engine', icon: Search },
