@@ -8,7 +8,6 @@ import '@/ai/flows/transcribe-court-proceedings.ts';
 import '@/ai/flows/summarize-judgment.ts';
 import '@/ai/flows/predict-case-outcome.ts';
 import '@/ai/flows/analyze-evidence.ts';
-import '@/ai/flows/simplify-legal.ts';
 import '@/ai/flows/simulate-reform.ts';
 import '@/ai/flows/optimize-settlement.ts';
 import '@/ai/flows/analyze-adjournments.ts';

@@ -13,7 +13,6 @@ import {
   Settings,
   LogOut,
   FileSearch,
-  User,
   Handshake,
   CalendarDays
 } from "lucide-react"
@@ -35,7 +34,6 @@ const mainNav = [
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
   { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },
   { id: 'settlement', label: 'Settlement Optimizer', icon: Handshake },
-  { id: 'simplifier', label: 'Citizen Portal', icon: User },
   { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'research', label: 'Research Engine', icon: Search },
   { id: 'drafting', label: 'Drafting Studio', icon: FileSignature },
