@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -44,7 +43,7 @@ export function SettlementOptimizer() {
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Settlement & Mediation Optimizer</h1>
         </div>
-        <p className="text-muted-foreground">Pre-trial analysis to estimate settlement probability and ADR pathways.</p>
+        <p className="text-muted-foreground">Pre-trial analysis for Indian disputes to estimate settlement probability and Lok Adalat/ADR pathways.</p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-12">
@@ -56,16 +55,16 @@ export function SettlementOptimizer() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Dispute Details</label>
               <Textarea 
-                placeholder="Describe the core conflict..." 
+                placeholder="Describe the core conflict, e.g. partition suit, matrimonial dispute, etc." 
                 className="bg-background/50 border-white/10"
                 value={form.disputeDetails}
                 onChange={e => setForm({...form, disputeDetails: e.target.value})}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Financial Exposure / Claim Value</label>
+              <label className="text-sm font-medium">Financial Exposure / Claim Value (₹)</label>
               <Input 
-                placeholder="e.g. $500,000 in damages" 
+                placeholder="e.g. ₹10,00,000 in damages" 
                 className="bg-background/50 border-white/10"
                 value={form.financialExposure}
                 onChange={e => setForm({...form, financialExposure: e.target.value})}
@@ -82,7 +81,7 @@ export function SettlementOptimizer() {
           {!result && !loading && (
             <Card className="h-full border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-12 text-center">
               <ShieldCheck className="w-16 h-16 text-muted-foreground/30 mb-6" />
-              <p className="text-muted-foreground">Submit dispute details to calculate settlement potential.</p>
+              <p className="text-muted-foreground">Submit dispute details to calculate Indian legal settlement potential.</p>
             </Card>
           )}
 

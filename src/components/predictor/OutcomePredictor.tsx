@@ -40,9 +40,9 @@ export function OutcomePredictor() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      caseType: "Civil Litigation",
+      caseType: "Civil Writ Petition",
       courtLevel: "High Court",
-      jurisdiction: "New York",
+      jurisdiction: "Delhi",
       facts: "",
       documentary: 50,
       witness: 50,
@@ -83,14 +83,14 @@ export function OutcomePredictor() {
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Case Outcome Predictor</h1>
         </div>
-        <p className="text-muted-foreground">Advanced predictive modeling based on case facts and evidentiary strength.</p>
+        <p className="text-muted-foreground">Predictive modeling based on Indian case facts and evidentiary strength.</p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-12">
         <Card className="lg:col-span-7 glass-card border-none">
           <CardHeader>
             <CardTitle>Case Parameters</CardTitle>
-            <CardDescription>Input case details and perceived evidentiary strength</CardDescription>
+            <CardDescription>Input case details and perceived evidentiary strength (Indian Context)</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -102,7 +102,7 @@ export function OutcomePredictor() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Case Type</FormLabel>
-                        <FormControl><Input placeholder="e.g. Contract Dispute" {...field} /></FormControl>
+                        <FormControl><Input placeholder="e.g. Property Dispute" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -113,7 +113,7 @@ export function OutcomePredictor() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Court Level</FormLabel>
-                        <FormControl><Input placeholder="e.g. District Court" {...field} /></FormControl>
+                        <FormControl><Input placeholder="e.g. High Court" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -125,8 +125,8 @@ export function OutcomePredictor() {
                   name="jurisdiction"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Jurisdiction</FormLabel>
-                      <FormControl><Input placeholder="e.g. California" {...field} /></FormControl>
+                      <FormLabel>Jurisdiction (State/UT)</FormLabel>
+                      <FormControl><Input placeholder="e.g. Maharashtra" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -140,7 +140,7 @@ export function OutcomePredictor() {
                       <FormLabel>Core Case Facts</FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Provide a detailed summary of the facts, dates, and parties involved..."
+                          placeholder="Provide summary of facts, relevant sections (e.g. Sec 138 NI Act), and dates..."
                           className="min-h-[120px] resize-none"
                           {...field} 
                         />
@@ -153,10 +153,10 @@ export function OutcomePredictor() {
                 <div className="space-y-6 pt-4">
                   <FormLabel className="text-primary font-bold uppercase tracking-wider text-[10px]">Evidence Strength Assessment</FormLabel>
                   {[
-                    { name: 'documentary', label: 'Documentary Evidence' },
+                    { name: 'documentary', label: 'Documentary Evidence (Registry, Wills, etc.)' },
                     { name: 'witness', label: 'Witness Testimony' },
-                    { name: 'precedents', label: 'Legal Precedents' },
-                    { name: 'opponent', label: 'Opponent\'s Strength' },
+                    { name: 'precedents', label: 'Legal Precedents (SC/HC Judgments)' },
+                    { name: 'opponent', label: 'Opponent\'s Case Strength' },
                   ].map((slider) => (
                     <FormField
                       key={slider.name}
@@ -205,7 +205,7 @@ export function OutcomePredictor() {
                 <BrainCircuit className="w-8 h-8 text-muted-foreground" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Awaiting Analysis</h3>
-              <p className="text-sm text-muted-foreground">Complete the form and evidentiary assessment to generate a prediction.</p>
+              <p className="text-sm text-muted-foreground">Complete the form and evidentiary assessment to generate an Indian legal prediction.</p>
             </Card>
           )}
 
@@ -224,7 +224,7 @@ export function OutcomePredictor() {
               <Card className="glass-card border-none overflow-hidden">
                 <CardHeader className="bg-primary/5 pb-6">
                   <div className="flex justify-between items-center mb-4">
-                    <Badge variant="outline" className="text-primary border-primary/20">Prediction Model v2.4</Badge>
+                    <Badge variant="outline" className="text-primary border-primary/20">India Model v2.4</Badge>
                     <div className="flex items-center gap-1 text-primary">
                       <CheckCircle2 className="w-4 h-4" />
                       <span className="text-xs font-bold uppercase tracking-widest">Analysis Ready</span>
