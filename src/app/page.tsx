@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -9,7 +8,6 @@ import { OutcomePredictor } from "@/components/predictor/OutcomePredictor"
 import { ResearchEngine } from "@/components/research/ResearchEngine"
 import { DraftingStudio } from "@/components/drafting/DraftingStudio"
 import { Stenographer } from "@/components/stenographer/Stenographer"
-import { JudgmentSummarizer } from "@/components/summarizer/JudgmentSummarizer"
 import { EvidenceHub } from "@/components/evidence/EvidenceHub"
 import { SettlementOptimizer } from "@/components/settlement/SettlementOptimizer"
 import { CalendarOptimizer } from "@/components/calendar/CalendarOptimizer"
@@ -28,7 +26,6 @@ export default function CourtIQApp() {
       case "research": return <ResearchEngine />
       case "drafting": return <DraftingStudio />
       case "stenographer": return <Stenographer />
-      case "summarizer": return <JudgmentSummarizer />
       default: return <JudicialDashboard />
     }
   }

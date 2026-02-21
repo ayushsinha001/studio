@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -8,7 +7,6 @@ import {
   Search, 
   FileSignature, 
   Mic, 
-  FileText,
   Gavel,
   Settings,
   LogOut,
@@ -38,7 +36,6 @@ const mainNav = [
   { id: 'research', label: 'Research Engine', icon: Search },
   { id: 'drafting', label: 'Drafting Studio', icon: FileSignature },
   { id: 'stenographer', label: 'AI Stenographer', icon: Mic },
-  { id: 'summarizer', label: 'Judgment Summarizer', icon: FileText },
 ]
 
 interface CourtIQSidebarProps {
