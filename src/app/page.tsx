@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,11 @@ import { ResearchEngine } from "@/components/research/ResearchEngine"
 import { DraftingStudio } from "@/components/drafting/DraftingStudio"
 import { Stenographer } from "@/components/stenographer/Stenographer"
 import { JudgmentSummarizer } from "@/components/summarizer/JudgmentSummarizer"
-import { Bell, Search, User } from "lucide-react"
+import { TriageCenter } from "@/components/assessment/TriageCenter"
+import { IntelligenceHub } from "@/components/intelligence/IntelligenceHub"
+import { EvidenceHub } from "@/components/evidence/EvidenceHub"
+import { CitizenPortal } from "@/components/citizen/CitizenPortal"
+import { Bell, Search } from "lucide-react"
 
 export default function CourtIQApp() {
   const [activeTab, setActiveTab] = React.useState("dashboard")
@@ -17,6 +22,10 @@ export default function CourtIQApp() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard": return <JudicialDashboard />
+      case "triage": return <TriageCenter />
+      case "intelligence": return <IntelligenceHub />
+      case "evidence": return <EvidenceHub />
+      case "simplifier": return <CitizenPortal />
       case "predictor": return <OutcomePredictor />
       case "research": return <ResearchEngine />
       case "drafting": return <DraftingStudio />

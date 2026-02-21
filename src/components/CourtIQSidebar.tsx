@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,8 +11,12 @@ import {
   FileText,
   Scale,
   Settings,
-  HelpCircle,
-  LogOut
+  LogOut,
+  Zap,
+  Globe,
+  FileSearch,
+  User,
+  Gavel
 } from "lucide-react"
 
 import {
@@ -24,11 +29,14 @@ import {
   SidebarMenuItem,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarSeparator,
 } from "@/components/ui/sidebar"
 
 const mainNav = [
   { id: 'dashboard', label: 'Judicial Dashboard', icon: LayoutDashboard },
+  { id: 'triage', label: 'Case Triage & JAI', icon: Zap },
+  { id: 'intelligence', label: 'Intelligence Grid', icon: Globe },
+  { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
+  { id: 'simplifier', label: 'Citizen Portal', icon: User },
   { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'research', label: 'Research Engine', icon: Search },
   { id: 'drafting', label: 'Drafting Studio', icon: FileSignature },
@@ -47,7 +55,7 @@ export function CourtIQSidebar({ activeTab, setActiveTab }: CourtIQSidebarProps)
       <SidebarHeader className="h-20 flex items-center justify-center border-b border-white/5">
         <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-            <Scale className="w-6 h-6" />
+            <Gavel className="w-6 h-6" />
           </div>
           <span className="text-xl font-headline font-bold tracking-tighter group-data-[collapsible=icon]:hidden">
             Court<span className="text-primary">IQ</span>
@@ -58,7 +66,7 @@ export function CourtIQSidebar({ activeTab, setActiveTab }: CourtIQSidebarProps)
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold mb-2 group-data-[collapsible=icon]:hidden">
-            Legal Intelligence
+            Judicial Suite
           </SidebarGroupLabel>
           <SidebarMenu>
             {mainNav.map((item) => (
@@ -67,7 +75,7 @@ export function CourtIQSidebar({ activeTab, setActiveTab }: CourtIQSidebarProps)
                   isActive={activeTab === item.id}
                   onClick={() => setActiveTab(item.id)}
                   tooltip={item.label}
-                  className={`h-12 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 group ${
+                  className={`h-11 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 group ${
                     activeTab === item.id ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
                   }`}
                 >

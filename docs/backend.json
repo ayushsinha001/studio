@@ -1,0 +1,59 @@
+
+{
+  "entities": {
+    "CaseAssessment": {
+      "title": "Case Assessment",
+      "description": "Comprehensive AI assessment of a case including triage, JAI score, and human impact.",
+      "type": "object",
+      "properties": {
+        "caseId": { "type": "string" },
+        "triageLevel": { "type": "string", "enum": ["Critical", "Standard", "Fast-Track", "Mediation"] },
+        "jaiScore": { "type": "number", "description": "Justice Acceleration Index (0-100)" },
+        "humanImpactFlags": { "type": "array", "items": { "type": "string" } },
+        "routingRecommendation": { "type": "string" },
+        "undertrialStatus": { "type": "string" },
+        "bailEligibility": { "type": "string" }
+      },
+      "required": ["caseId", "triageLevel", "jaiScore"]
+    },
+    "EvidenceAnalysis": {
+      "title": "Evidence Analysis",
+      "description": "Structured analysis of evidence documents like FIRs or affidavits.",
+      "type": "object",
+      "properties": {
+        "facts": { "type": "array", "items": { "type": "string" } },
+        "contradictions": { "type": "array", "items": { "type": "string" } },
+        "gaps": { "type": "array", "items": { "type": "string" } },
+        "strengthIndicator": { "type": "number" }
+      }
+    },
+    "AdjournmentLog": {
+      "title": "Adjournment Log",
+      "description": "Tracking and analysis of hearing postponements.",
+      "type": "object",
+      "properties": {
+        "caseId": { "type": "string" },
+        "reason": { "type": "string" },
+        "delayProbability": { "type": "number" },
+        "patternAlerts": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com"]
+  },
+  "firestore": {
+    "/assessments/{assessmentId}": {
+      "schema": "CaseAssessment",
+      "description": "AI-generated case assessments and triage data."
+    },
+    "/evidence-analyses/{analysisId}": {
+      "schema": "EvidenceAnalysis",
+      "description": "Deep analysis of case evidence documents."
+    },
+    "/adjournments/{logId}": {
+      "schema": "AdjournmentLog",
+      "description": "Logs and analytics for case delays and adjournments."
+    }
+  }
+}
