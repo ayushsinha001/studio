@@ -12,7 +12,6 @@ import {
   Gavel,
   Settings,
   LogOut,
-  Zap,
   FileSearch,
   User,
   Handshake,
@@ -33,7 +32,6 @@ import {
 
 const mainNav = [
   { id: 'dashboard', label: 'Judicial Dashboard', icon: LayoutDashboard },
-  { id: 'triage', label: 'Case Triage & JAI', icon: Zap },
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
   { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },
   { id: 'settlement', label: 'Settlement Optimizer', icon: Handshake },

@@ -10,7 +10,6 @@ import { ResearchEngine } from "@/components/research/ResearchEngine"
 import { DraftingStudio } from "@/components/drafting/DraftingStudio"
 import { Stenographer } from "@/components/stenographer/Stenographer"
 import { JudgmentSummarizer } from "@/components/summarizer/JudgmentSummarizer"
-import { TriageCenter } from "@/components/assessment/TriageCenter"
 import { EvidenceHub } from "@/components/evidence/EvidenceHub"
 import { CitizenPortal } from "@/components/citizen/CitizenPortal"
 import { SettlementOptimizer } from "@/components/settlement/SettlementOptimizer"
@@ -23,7 +22,6 @@ export default function CourtIQApp() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard": return <JudicialDashboard />
-      case "triage": return <TriageCenter />
       case "evidence": return <EvidenceHub />
       case "calendar": return <CalendarOptimizer />
       case "settlement": return <SettlementOptimizer />
@@ -40,7 +38,7 @@ export default function CourtIQApp() {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full bg-background">
-        <CourtIQSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        < CourtIQSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
         <SidebarInset className="bg-background">
           <header className="sticky top-0 z-30 flex h-20 items-center justify-between px-8 border-b border-white/5 bg-background/80 backdrop-blur-md">
