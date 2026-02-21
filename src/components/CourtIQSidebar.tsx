@@ -29,10 +29,10 @@ import {
 
 const mainNav = [
   { id: 'dashboard', label: 'Judicial Dashboard', icon: LayoutDashboard },
+  { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
   { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },
   { id: 'settlement', label: 'Settlement Optimizer', icon: Handshake },
-  { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'research', label: 'Research Engine', icon: Search },
   { id: 'drafting', label: 'Drafting Studio', icon: FileSignature },
   { id: 'stenographer', label: 'AI Stenographer', icon: Mic },
