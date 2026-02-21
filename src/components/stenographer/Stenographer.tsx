@@ -67,7 +67,7 @@ export function Stenographer() {
           {loading ? "Transcribing Proceedings..." : "Start Official Transcription"}
         </h3>
         <p className="text-muted-foreground max-w-md mb-8">
-          Upload audio recordings or start a live recording session. AI will automatically separate speakers and format as a legal transcript.
+          Upload audio recordings to begin transcription. AI will automatically separate speakers and format as a legal transcript.
         </p>
 
         <div className="flex gap-4">
@@ -86,10 +86,6 @@ export function Stenographer() {
           >
             <Upload className="w-4 h-4 mr-2" />
             Upload Audio File
-          </Button>
-          <Button className="h-12 px-8 rounded-xl blue-gradient" disabled={loading}>
-            <Mic className="w-4 h-4 mr-2" />
-            Live Recording
           </Button>
         </div>
       </Card>
