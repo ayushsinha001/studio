@@ -9,14 +9,13 @@ import {
   FileSignature, 
   Mic, 
   FileText,
-  Scale,
+  Gavel,
   Settings,
   LogOut,
   Zap,
   Globe,
   FileSearch,
   User,
-  Gavel,
   Handshake,
   Clock,
   CalendarDays
@@ -37,7 +36,6 @@ import {
 const mainNav = [
   { id: 'dashboard', label: 'Judicial Dashboard', icon: LayoutDashboard },
   { id: 'triage', label: 'Case Triage & JAI', icon: Zap },
-  { id: 'intelligence', label: 'Intelligence Grid', icon: Globe },
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
   { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },
   { id: 'adjournments', label: 'Adjournment Analyzer', icon: Clock },

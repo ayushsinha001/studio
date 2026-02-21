@@ -11,7 +11,6 @@ import { DraftingStudio } from "@/components/drafting/DraftingStudio"
 import { Stenographer } from "@/components/stenographer/Stenographer"
 import { JudgmentSummarizer } from "@/components/summarizer/JudgmentSummarizer"
 import { TriageCenter } from "@/components/assessment/TriageCenter"
-import { IntelligenceHub } from "@/components/intelligence/IntelligenceHub"
 import { EvidenceHub } from "@/components/evidence/EvidenceHub"
 import { CitizenPortal } from "@/components/citizen/CitizenPortal"
 import { SettlementOptimizer } from "@/components/settlement/SettlementOptimizer"
@@ -26,7 +25,6 @@ export default function CourtIQApp() {
     switch (activeTab) {
       case "dashboard": return <JudicialDashboard />
       case "triage": return <TriageCenter />
-      case "intelligence": return <IntelligenceHub />
       case "evidence": return <EvidenceHub />
       case "calendar": return <CalendarOptimizer />
       case "adjournments": return <AdjournmentAnalyzer />
