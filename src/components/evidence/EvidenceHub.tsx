@@ -1,8 +1,7 @@
-
 "use client"
 
 import * as React from "react"
-import { FileSearch, Loader2, CheckCircle2, AlertCircle, HelpCircle, Activity } from "lucide-react"
+import { FileSearch, Loader2, CheckCircle2, AlertCircle, AlertTriangle, HelpCircle, Activity } from "lucide-react"
 import { analyzeEvidence, type AnalyzeEvidenceOutput } from "@/ai/flows/analyze-evidence"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
