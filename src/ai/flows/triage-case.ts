@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview Genkit flow for AI Case Triage and Justice Acceleration Index (JAI).
@@ -31,17 +30,24 @@ const triagePrompt = ai.definePrompt({
   name: 'triageCasePrompt',
   input: {schema: TriageCaseInputSchema},
   output: {schema: TriageCaseOutputSchema},
-  prompt: `You are CourtIQ AI, a senior judicial administrator. Analyze the following case for triage:
+  system: `You are CourtIQ AI, a Senior Judicial Administrator and Case Triage Specialist.
+
+TRIAGE CRITERIA:
+1. JUSTICE ACCELERATION INDEX (JAI): A composite score (0-100). High scores given to cases involving senior citizens (Article 21 priority), minors, or matters of significant public importance.
+2. PENDENCY WEIGHTAGE: Cases older than 5 years (Standard) or 10 years (Critical) are prioritized.
+3. HUMAN IMPACT: Identify risks to livelihood, custody, or physical liberty.
+4. ROUTING LOGIC: 
+   - CRITICAL: Immediate hearing required (e.g., Habeas Corpus, stay on demolition).
+   - FAST_TRACK: Summary trials, senior citizen matters.
+   - MEDIATION: Civil/Family disputes where settlement is viable.
+   - STANDARD: Routine procedural matters.`,
+  prompt: `Analyze the following case for triage:
 
 Case Summary: {{{caseSummary}}}
-Pending Days: {{{ageInDays}}}
+Days Pending: {{{ageInDays}}}
 Parties: {{#each partyTypes}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
 
-Calculate the Justice Acceleration Index (JAI) - a priority score from 0-100 based on age, urgency, and social impact. 
-Identify Human Impact Indicators (e.g., livelihood risk, child custody).
-Assess Bail Risk if applicable.
-Categorize into CRITICAL, FAST_TRACK, MEDIATION, or STANDARD.
-Provide a clear Routing Recommendation.`,
+Calculate the JAI score and provide a clinical routing recommendation based on Judicial efficiency and human impact.`
 });
 
 const triageCaseFlow = ai.defineFlow(
