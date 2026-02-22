@@ -11,4 +11,3 @@ import '@/ai/flows/simulate-reform.ts';
 import '@/ai/flows/optimize-settlement.ts';
 import '@/ai/flows/analyze-adjournments.ts';
 import '@/ai/flows/optimize-calendar.ts';
-import '@/ai/flows/legal-assistant.ts';
