@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -11,6 +12,7 @@ import { Stenographer } from "@/components/stenographer/Stenographer"
 import { EvidenceHub } from "@/components/evidence/EvidenceHub"
 import { SettlementOptimizer } from "@/components/settlement/SettlementOptimizer"
 import { CalendarOptimizer } from "@/components/calendar/CalendarOptimizer"
+import { LegalAssistant } from "@/components/assistant/LegalAssistant"
 import { Bell, Search } from "lucide-react"
 
 export default function CourtIQApp() {
@@ -19,10 +21,11 @@ export default function CourtIQApp() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard": return <JudicialDashboard />
+      case "assistant": return <LegalAssistant />
+      case "predictor": return <OutcomePredictor />
       case "evidence": return <EvidenceHub />
       case "calendar": return <CalendarOptimizer />
       case "settlement": return <SettlementOptimizer />
-      case "predictor": return <OutcomePredictor />
       case "research": return <ResearchEngine />
       case "drafting": return <DraftingStudio />
       case "stenographer": return <Stenographer />

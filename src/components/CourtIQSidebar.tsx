@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -12,7 +13,8 @@ import {
   LogOut,
   FileSearch,
   Handshake,
-  CalendarDays
+  CalendarDays,
+  Sparkles
 } from "lucide-react"
 
 import {
@@ -29,6 +31,7 @@ import {
 
 const mainNav = [
   { id: 'dashboard', label: 'Judicial Dashboard', icon: LayoutDashboard },
+  { id: 'assistant', label: 'AI Legal Assistant', icon: Sparkles },
   { id: 'predictor', label: 'Outcome Predictor', icon: BrainCircuit },
   { id: 'evidence', label: 'Evidence Analyzer', icon: FileSearch },
   { id: 'calendar', label: 'Smart Calendar', icon: CalendarDays },

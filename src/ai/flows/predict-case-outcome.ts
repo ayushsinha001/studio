@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A Genkit flow for predicting the outcome of a legal case based on various inputs, localized for the Indian context.
@@ -11,10 +12,10 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const PredictCaseOutcomeInputSchema = z.object({
-  caseType: z.string().describe('The type of the legal case (e.g., Civil, Criminal, Writ Petition).'),
-  courtLevel: z.string().describe('The level of the court (e.g., District Court, High Court, Supreme Court of India).'),
-  jurisdiction: z.string().describe('The Indian state or union territory jurisdiction (e.g., Maharashtra, Delhi, Karnataka).'),
-  facts: z.string().describe('Detailed facts of the case, including relevant events, sections of IPC/BNS, CrPC/BNSS, etc.'),
+  caseType: z.string().min(2).describe('The type of the legal case (e.g., Civil, Criminal, Writ Petition).'),
+  courtLevel: z.string().min(2).describe('The level of the court (e.g., District Court, High Court, Supreme Court of India).'),
+  jurisdiction: z.string().min(2).describe('The Indian state or union territory jurisdiction (e.g., Maharashtra, Delhi, Karnataka).'),
+  facts: z.string().min(10).describe('Detailed facts of the case, including relevant events, sections of IPC/BNS, CrPC/BNSS, etc.'),
   evidenceStrengthSliders: z.object({
     documentary: z.number().min(0).max(100).describe('Strength of documentary evidence (0-100).'),
     witness: z.number().min(0).max(100).describe('Strength of witness testimony (0-100).'),
@@ -46,11 +47,16 @@ const predictCaseOutcomePrompt = ai.definePrompt({
   name: 'predictCaseOutcomePrompt',
   input: {schema: PredictCaseOutcomeInputSchema},
   output: {schema: PredictCaseOutcomeOutputSchema},
-  prompt: `You are CourtIQ AI, a senior legal associate and expert in Indian Jurisprudence. Maintain a professional, neutral, and assertive tone. Prioritize legal accuracy and structural formality within the context of Indian Law (IPC/BNS, CrPC/BNSS, CPC, Evidence Act/BSA).
+  system: `You are CourtIQ AI, a senior legal associate and expert in Indian Jurisprudence. 
 
-Your task is to analyze the provided Indian legal case details and evidence strengths to predict the most likely case outcome. You must also provide a confidence score, identify key strengths and risks, suggest strategic approaches, and most importantly, identify historical Indian legal precedents (Supreme Court or High Court cases) that support your prediction.
+MISSION: Provide high-fidelity predictive analysis of case outcomes within the Indian Judicial System.
 
-Analyze the following case information:
+PROMPT GUIDELINES:
+1. STATUTORY RIGOR: References must distinguish between the Indian Penal Code (IPC) and Bharatiya Nyaya Sanhita (BNS) contextually.
+2. PRECEDENTIAL ANALYSIS: You must identify specific Supreme Court of India or High Court judgments that establish the "Ratio Decidendi" for your prediction.
+3. EVIDENTIARY HIERARCHY: Prioritize documentary evidence over witness testimony in civil matters, and vice versa in specific criminal categories.
+4. CONFIDENCE SCORING: Be intellectually honest. If facts are ambiguous, lower the confidence score and highlight the specific missing 'fact-in-issue'.`,
+  prompt: `Analyze the following Indian legal case parameters:
 
 Case Type: {{{caseType}}}
 Court Level: {{{courtLevel}}}
@@ -59,12 +65,12 @@ Facts:
 {{{facts}}}
 
 Evidence Strengths (0-100 scale):
-- Documentary Evidence: {{{evidenceStrengthSliders.documentary}}}
-- Witness Testimony: {{{evidenceStrengthSliders.witness}}}
+- Documentary: {{{evidenceStrengthSliders.documentary}}}
+- Witness: {{{evidenceStrengthSliders.witness}}}
 - Legal Precedents: {{{evidenceStrengthSliders.precedents}}}
-- Opponent's Case Strength: {{{evidenceStrengthSliders.opponent}}}
+- Opponent: {{{evidenceStrengthSliders.opponent}}}
 
-Based on this analysis, provide the predicted outcome, confidence score, key strengths, key risks, strategy suggestions, and the list of reference cases in the specified JSON format.`
+Provide a detailed prediction including outcome, confidence, key factors, strategy, and historical citations (Supreme Court/High Court) that support this specific reasoning.`
 });
 
 const predictCaseOutcomeFlow = ai.defineFlow(
