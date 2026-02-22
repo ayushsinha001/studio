@@ -1,41 +1,36 @@
-
 'use server';
 /**
  * @fileOverview A Genkit flow for predicting the outcome of a legal case based on various inputs, localized for the Indian context.
- *
- * - predictCaseOutcome - A function that handles the case outcome prediction process.
- * - PredictCaseOutcomeInput - The input type for the predictCaseOutcome function.
- * - PredictCaseOutcomeOutput - The return type for the predictCaseOutcome function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const PredictCaseOutcomeInputSchema = z.object({
-  caseType: z.string().min(2).describe('The type of the legal case (e.g., Civil, Criminal, Writ Petition).'),
-  courtLevel: z.string().min(2).describe('The level of the court (e.g., District Court, High Court, Supreme Court of India).'),
-  jurisdiction: z.string().min(2).describe('The Indian state or union territory jurisdiction (e.g., Maharashtra, Delhi, Karnataka).'),
-  facts: z.string().min(10).describe('Detailed facts of the case, including relevant events, sections of IPC/BNS, CrPC/BNSS, etc.'),
+  caseType: z.string().min(2).describe('The type of the legal case (e.g., Civil, Criminal).'),
+  courtLevel: z.string().min(2).describe('The level of the court (e.g., High Court).'),
+  jurisdiction: z.string().min(2).describe('The Indian state or union territory.'),
+  facts: z.string().min(10).describe('Detailed facts of the case.'),
   evidenceStrengthSliders: z.object({
-    documentary: z.number().min(0).max(100).describe('Strength of documentary evidence (0-100).'),
-    witness: z.number().min(0).max(100).describe('Strength of witness testimony (0-100).'),
-    precedents: z.number().min(0).max(100).describe('Strength of relevant Indian legal precedents (0-100).'),
-    opponent: z.number().min(0).max(100).describe('Perceived strength of the opponent\'s case (0-100).')
-  }).describe('Slider values indicating the perceived strength of various evidence categories.')
+    documentary: z.number().min(0).max(100),
+    witness: z.number().min(0).max(100),
+    precedents: z.number().min(0).max(100),
+    opponent: z.number().min(0).max(100)
+  })
 });
 export type PredictCaseOutcomeInput = z.infer<typeof PredictCaseOutcomeInputSchema>;
 
 const PredictCaseOutcomeOutputSchema = z.object({
-  predictedOutcome: z.string().describe('The most likely predicted outcome (e.g., "Allowed", "Dismissed", "Partial Relief", "Settlement Recommended").'),
-  confidenceScore: z.number().min(0).max(100).describe('A numerical score (0-100) representing the confidence in the predicted outcome.'),
-  keyStrengths: z.array(z.string()).describe('A list of key factors that strengthen the case.'),
-  keyRisks: z.array(z.string()).describe('A list of key factors that pose risks or weaknesses.'),
-  strategySuggestions: z.array(z.string()).describe('Actionable suggestions for strategic approaches based on Indian law and procedure.'),
+  predictedOutcome: z.string(),
+  confidenceScore: z.number().min(0).max(100),
+  keyStrengths: z.array(z.string()),
+  keyRisks: z.array(z.string()),
+  strategySuggestions: z.array(z.string()),
   references: z.array(z.object({
-    caseName: z.string().describe('Name of the historical reference case.'),
-    citation: z.string().describe('Legal citation for the reference case.'),
-    relevance: z.string().describe('Brief explanation of why this case is relevant to the current prediction.')
-  })).describe('Historical cases or legal precedents used to derive this prediction.')
+    caseName: z.string(),
+    citation: z.string(),
+    relevance: z.string()
+  }))
 });
 export type PredictCaseOutcomeOutput = z.infer<typeof PredictCaseOutcomeOutputSchema>;
 
@@ -47,15 +42,18 @@ const predictCaseOutcomePrompt = ai.definePrompt({
   name: 'predictCaseOutcomePrompt',
   input: {schema: PredictCaseOutcomeInputSchema},
   output: {schema: PredictCaseOutcomeOutputSchema},
-  system: `You are CourtIQ AI, a senior legal associate and expert in Indian Jurisprudence. 
+  system: `You are the CourtIQ Predictive Intelligence Engine, specialized in Indian Jurisprudence.
 
-MISSION: Provide high-fidelity predictive analysis of case outcomes within the Indian Judicial System.
+ANALYTICAL FRAMEWORK:
+1. EVIDENTIARY WEIGHTAGE: In Civil cases, prioritize 'Preponderance of Probabilities'. In Criminal cases, use the 'Beyond Reasonable Doubt' standard.
+2. SECTIONAL ANALYSIS: Correlate facts with specific provisions of the IPC/BNS or relevant Special Acts (NDPS, PMLA, etc.).
+3. BURDEN OF PROOF: Identify which party carries the burden as per Section 101-106 of the Indian Evidence Act (or corresponding BSA sections).
+4. PRECEDENTIAL MATCHING: Scan historical data for Supreme Court cases with similar 'Facts-in-issue'.
 
-PROMPT GUIDELINES:
-1. STATUTORY RIGOR: References must distinguish between the Indian Penal Code (IPC) and Bharatiya Nyaya Sanhita (BNS) contextually.
-2. PRECEDENTIAL ANALYSIS: You must identify specific Supreme Court of India or High Court judgments that establish the "Ratio Decidendi" for your prediction.
-3. EVIDENTIARY HIERARCHY: Prioritize documentary evidence over witness testimony in civil matters, and vice versa in specific criminal categories.
-4. CONFIDENCE SCORING: Be intellectually honest. If facts are ambiguous, lower the confidence score and highlight the specific missing 'fact-in-issue'.`,
+DETERMINATION GUIDELINES:
+- If Documentary evidence is high (>80) but Witness is low (<30), civil success probability is high, but criminal conviction risk is higher.
+- If Opponent strength is high (>70), highlight specific 'Rebuttal Strategies'.
+- CITATIONS: You MUST provide real or highly probable historical citations (e.g., 'AIR 2023 SC 456') that anchor your logic.`,
   prompt: `Analyze the following Indian legal case parameters:
 
 Case Type: {{{caseType}}}
@@ -70,7 +68,7 @@ Evidence Strengths (0-100 scale):
 - Legal Precedents: {{{evidenceStrengthSliders.precedents}}}
 - Opponent: {{{evidenceStrengthSliders.opponent}}}
 
-Provide a detailed prediction including outcome, confidence, key factors, strategy, and historical citations (Supreme Court/High Court) that support this specific reasoning.`
+Provide a detailed prediction including outcome, confidence, strategic analysis, and the historical citations that support this reasoning.`
 });
 
 const predictCaseOutcomeFlow = ai.defineFlow(
@@ -81,9 +79,6 @@ const predictCaseOutcomeFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await predictCaseOutcomePrompt(input);
-    if (!output) {
-      throw new Error('Failed to get output from predictCaseOutcomePrompt');
-    }
-    return output;
+    return output!;
   }
 );
