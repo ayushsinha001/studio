@@ -2,7 +2,7 @@
 "use client"
 
 import * as React from "react"
-import { Calendar as CalendarIcon, Loader2, Sparkles, Clock, LayoutGrid, Timer, AlertCircle } from "lucide-react"
+import { Calendar as CalendarIcon, Loader2, Sparkles, Clock, LayoutGrid, Timer } from "lucide-react"
 import { optimizeCalendar, type OptimizeCalendarOutput } from "@/ai/flows/optimize-calendar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -30,12 +30,11 @@ export function CalendarOptimizer() {
       })
       setResult(output)
     } catch (error: any) {
-      console.error(error)
-      const isQuotaError = error.message?.includes('quota') || error.message?.includes('429');
+      const isQuotaError = error.message?.toLowerCase().includes('quota') || error.message?.includes('429') || error.message?.includes('RESOURCE_EXHAUSTED');
       toast({
-        title: isQuotaError ? "Rate Limit Exceeded" : "Optimization Failed",
+        title: isQuotaError ? "AI Rate Limit Exceeded" : "Optimization Failed",
         description: isQuotaError 
-          ? "The AI service is currently busy. Please wait a moment and try again." 
+          ? "The AI scheduler is currently handling too many requests. Please wait a few seconds and try again." 
           : "An error occurred while generating the schedule.",
         variant: "destructive"
       })

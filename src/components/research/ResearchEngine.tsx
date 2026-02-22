@@ -1,18 +1,21 @@
+
 "use client"
 
 import * as React from "react"
-import { Search, Loader2, BookOpen, Scale, FileText, HelpCircle, MessageSquare } from "lucide-react"
+import { Search, Loader2, BookOpen, Scale, FileText, HelpCircle } from "lucide-react"
 import { researchCaseLaw, type ResearchCaseLawOutput } from "@/ai/flows/research-case-law"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
 
 export function ResearchEngine() {
   const [loading, setLoading] = React.useState(false)
   const [summary, setSummary] = React.useState("")
   const [data, setData] = React.useState<ResearchCaseLawOutput | null>(null)
+  const { toast } = useToast()
 
   const handleResearch = async () => {
     if (!summary.trim()) return
@@ -20,8 +23,15 @@ export function ResearchEngine() {
     try {
       const result = await researchCaseLaw({ caseSummary: summary })
       setData(result)
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      const isQuotaError = error.message?.toLowerCase().includes('quota') || error.message?.includes('429') || error.message?.includes('RESOURCE_EXHAUSTED');
+      toast({
+        title: isQuotaError ? "Rate Limit Exceeded" : "Research Failed",
+        description: isQuotaError 
+          ? "The legal database is experiencing high traffic. Please try again in a few seconds." 
+          : "An error occurred while analyzing the case summary.",
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }

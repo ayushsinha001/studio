@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -8,11 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
 
 export function DraftingStudio() {
   const [loading, setLoading] = React.useState(false)
   const [data, setData] = React.useState<AutomateLegalDraftingOutput | null>(null)
+  const { toast } = useToast()
   
   const [form, setForm] = React.useState({
     documentType: "Non-Disclosure Agreement",
@@ -26,8 +28,15 @@ export function DraftingStudio() {
     try {
       const result = await automateLegalDrafting(form)
       setData(result)
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      const isQuotaError = error.message?.toLowerCase().includes('quota') || error.message?.includes('429') || error.message?.includes('RESOURCE_EXHAUSTED');
+      toast({
+        title: isQuotaError ? "Drafting Limit Reached" : "Drafting Failed",
+        description: isQuotaError 
+          ? "The AI drafting studio is busy. Please wait a few seconds before generating another draft." 
+          : "An error occurred while generating the legal document.",
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }
