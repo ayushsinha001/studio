@@ -2,15 +2,17 @@
 "use client"
 
 import * as React from "react"
-import { Calendar as CalendarIcon, Loader2, Sparkles, Clock, LayoutGrid, Timer } from "lucide-react"
+import { Calendar as CalendarIcon, Loader2, Sparkles, Clock, LayoutGrid, Timer, AlertCircle } from "lucide-react"
 import { optimizeCalendar, type OptimizeCalendarOutput } from "@/ai/flows/optimize-calendar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
 
 export function CalendarOptimizer() {
   const [loading, setLoading] = React.useState(false)
   const [result, setResult] = React.useState<OptimizeCalendarOutput | null>(null)
+  const { toast } = useToast()
 
   const pendingHearings = [
     { caseTitle: "Smith v. Matrix Corp", complexity: "High" as const },
@@ -27,8 +29,16 @@ export function CalendarOptimizer() {
         availableSlots: 4
       })
       setResult(output)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
+      const isQuotaError = error.message?.includes('quota') || error.message?.includes('429');
+      toast({
+        title: isQuotaError ? "Rate Limit Exceeded" : "Optimization Failed",
+        description: isQuotaError 
+          ? "The AI service is currently busy. Please wait a moment and try again." 
+          : "An error occurred while generating the schedule.",
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }

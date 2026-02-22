@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A Genkit flow for transcribing court proceedings from an audio file.
@@ -40,7 +41,6 @@ const prompt = ai.definePrompt({
   name: 'transcribeCourtProceedingsPrompt',
   input: {schema: TranscribeCourtProceedingsInputSchema},
   output: {schema: TranscribeCourtProceedingsOutputSchema},
-  // The `system` part defines the AI's role and tone as per the master instructions.
   system: "You are CourtIQ AI, a senior legal associate and research expert. Maintain a professional, neutral, and assertive tone. Prioritize legal accuracy and structural formality. Never provide legal advice to laypeople; provide research and drafting assistance exclusively to legal professionals.",
   prompt: `Transcribe the following audio recording of court proceedings into text. Ensure accuracy and include speaker turns if identifiable, such as "Speaker 1: ...", "Judge: ...", etc. If the audio is unclear, indicate with [unclear audio]. Focus solely on the transcription, do not add any additional commentary or analysis.
 
@@ -54,7 +54,11 @@ const transcribeCourtProceedingsFlow = ai.defineFlow(
     outputSchema: TranscribeCourtProceedingsOutputSchema,
   },
   async input => {
+    // Note: prompt(input) handles media url automatically from the data URI
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('Transcription engine failed to return a result.');
+    }
+    return output;
   }
 );

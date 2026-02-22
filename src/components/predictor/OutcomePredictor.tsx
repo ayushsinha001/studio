@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -24,6 +25,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { useToast } from "@/hooks/use-toast"
 
 const caseTypes = [
   "Civil Writ Petition",
@@ -54,6 +56,7 @@ const formSchema = z.object({
 export function OutcomePredictor() {
   const [loading, setLoading] = React.useState(false)
   const [result, setResult] = React.useState<PredictCaseOutcomeOutput | null>(null)
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,8 +88,16 @@ export function OutcomePredictor() {
         },
       })
       setResult(output)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
+      const isQuotaError = error.message?.includes('quota') || error.message?.includes('429');
+      toast({
+        title: isQuotaError ? "Rate Limit Exceeded" : "Prediction Failed",
+        description: isQuotaError 
+          ? "The Indian Law model is experiencing high traffic. Please try again in a moment." 
+          : "An error occurred while processing your case prediction.",
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }

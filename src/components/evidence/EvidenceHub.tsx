@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -8,11 +9,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
 
 export function EvidenceHub() {
   const [loading, setLoading] = React.useState(false)
   const [data, setData] = React.useState<AnalyzeEvidenceOutput | null>(null)
   const [input, setInput] = React.useState("")
+  const { toast } = useToast()
 
   const handleAnalyze = async () => {
     if (!input.trim()) return
@@ -23,8 +26,16 @@ export function EvidenceHub() {
         documentType: "First Information Report (FIR)"
       })
       setData(result)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
+      const isQuotaError = error.message?.includes('quota') || error.message?.includes('429');
+      toast({
+        title: isQuotaError ? "Rate Limit Exceeded" : "Analysis Failed",
+        description: isQuotaError 
+          ? "AI limits reached. Please try again in a few seconds." 
+          : "Could not analyze the provided evidence document.",
+        variant: "destructive"
+      })
     } finally {
       setLoading(false)
     }
